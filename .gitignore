@@ -1,0 +1,6 @@
+tests/browser/
+tests/robot_logs/
+.DS_Store
+tests/.pabotsuitenames
+tests/frpc.ini
+tests/xvfb.sh
