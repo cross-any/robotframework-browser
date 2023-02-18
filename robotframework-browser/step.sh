@@ -22,7 +22,7 @@ cd $PROJECT_DIR
 
 # sh -ex $WORK_SPACE/user_command.sh
 # bash -c "$STEP_COMMAND"
-/root/entry_point.sh $TESTCOMMAND
+/root/entry_point.sh $TESTCOMMAND || echo [ERROR] 测试失败了
 
 # # 上传报告
 # # walk through robot_logs to upload

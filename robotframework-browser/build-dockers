@@ -1,0 +1,18 @@
+#!/bin/bash
+set -e
+pushd $(dirname $0)
+    docker build -t registry.cn-beijing.aliyuncs.com/windli/robotframework-browser:1.0 -f Dockerfile ..
+    pushd chromium
+        docker build -t registry.cn-beijing.aliyuncs.com/windli/robotframework-browser-chromium:1.0 -f Dockerfile ..
+    popd
+    pushd all
+        docker build -t registry.cn-beijing.aliyuncs.com/windli/robotframework-browser-all:1.0 -f Dockerfile ..
+    popd
+
+    pushd firefox
+        docker build -t registry.cn-beijing.aliyuncs.com/windli/robotframework-browser-firefox:1.0 -f Dockerfile ..
+    popd
+    pushd webgit
+        docker build -t registry.cn-beijing.aliyuncs.com/windli/robotframework-browser-webgit:1.0 -f Dockerfile ..
+    popd
+popd
