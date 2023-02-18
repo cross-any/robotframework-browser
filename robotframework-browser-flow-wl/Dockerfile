@@ -3,11 +3,11 @@
 FROM registry.cn-beijing.aliyuncs.com/windli/robotframework-browser:1.0
 LABEL org.opencontainers.image.authors="yong.li@governance-solutions.com"
 
-COPY */step.sh /root/step.sh
+COPY robotframework-browser*/step.sh /root/step.sh
 COPY robotframework-browser/*.sh /root/
 RUN chmod +x /root/*.sh /root/*.py /usr/bin/jq
+COPY ignored-envs.txt /ignored-envs.txt
 
 EXPOSE 5900
 EXPOSE 7900
-VOLUME ["/app","/out","/tests"]
 ENTRYPOINT [ "/root/entry.sh"]
