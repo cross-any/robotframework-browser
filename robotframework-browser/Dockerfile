@@ -7,9 +7,9 @@ ENV PATH /opt/node-v16.9.1-linux-x64/bin:/usr/local/sbin:/usr/local/bin:/usr/sbi
 ENV SCREEN_WIDTH 1280
 ENV SCREEN_HEIGHT 720
 ENV SCREEN_DEPTH 16
-ENV LANG zh_CN.UTF-8
-ENV LANGUAGE zh_CN:zh
-ENV LC_ALL zh_CN.UTF-8
+# ENV LANG zh_CN.UTF-8
+# ENV LANGUAGE zh_CN:zh
+# ENV LC_ALL zh_CN.UTF-8
 ENV TZ Asia/Shanghai
 ENV DISPLAY :99
 RUN sed -i -E 's/archive.ubuntu.com/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list && sed -i -E 's/security.ubuntu.com/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list
