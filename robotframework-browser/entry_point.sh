@@ -63,6 +63,10 @@ elif [ "$1" = "robot" ]; then
 elif [ "$1" = "npx" ]; then
   npm install
   shift
+  if [ ! -e /root/.cache/ms-playwright ]; then
+    mkdir -p /root/.cache && \
+      ln -s /usr/local/lib/python3*/*-packages/Browser/wrapper/node_modules/playwright-core/.local-browsers/ /root/.cache/ms-playwright
+  fi
   npx "$@"
 else
   "$@"
