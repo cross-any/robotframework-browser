@@ -1,7 +1,14 @@
 tests/browser/
 tests/robot_logs/
+tests/1
+tests/log.html
+tests/output.xml
+tests/playwright-log.txt
+tests/report.html
 .DS_Store
 tests/.pabotsuitenames
 tests/frpc.ini
 tests/xvfb.sh
 windli-test1/
+a/
+b/

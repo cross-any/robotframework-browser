@@ -1,5 +1,5 @@
-# docker build -t registry.cn-beijing.aliyuncs.com/windli/robotframework-browser-flow-chromium:1.0 -f Dockerfile ..
-FROM registry.cn-beijing.aliyuncs.com/windli/robotframework-browser-chromium:1.0
+# docker build -t registry.cn-beijing.aliyuncs.com/windli/registry.cn-beijing.aliyuncs.com/windli/robotframework-browser-flow-firefox:1.0 -f Dockerfile ..
+FROM registry.cn-beijing.aliyuncs.com/windli/robotframework-browser-firefox:1.0
 LABEL org.opencontainers.image.authors="yong.li@governance-solutions.com"
 
 COPY robotframework-browser*/step.sh /root/step.sh

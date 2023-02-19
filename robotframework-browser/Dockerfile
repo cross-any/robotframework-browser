@@ -72,7 +72,7 @@ RUN chmod -R 777 ${HOME} \
   && chgrp -R 0 ${HOME} \
   && chmod -R g=u ${HOME}
 
-RUN curl -skL https://github.com/fatedier/frp/releases/download/v0.47.0/frp_0.47.0_linux_amd64.tar.gz | gunzip |tar xvf - -C /opt && /bin/rm -rf /opt/frp_0.47.0_linux_amd64/{frps*,*.ini}
+RUN curl -skL https://github.com/fatedier/frp/releases/download/v0.47.0/frp_0.47.0_linux_amd64.tar.gz | gunzip |tar xvf - -C /opt && sh -c '/bin/rm -rf /opt/frp_0.47.0_linux_amd64/{frps*,*.ini}'
 
 COPY .step/*.sh /root/
 COPY */step.sh /root/step.sh
