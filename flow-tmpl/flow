@@ -1,0 +1,24 @@
+#!/bin/bash
+set -e
+BASEDIR=$(realpath $(dirname $0))
+export PATH=$PATH:$BASEDIR
+pushd $BASEDIR
+unameOut="$(uname -s)"
+case "${unameOut}" in
+    Linux*)     FLOWBIN=flow.linux;FLOWURL=https://rdc-plugin-storage.oss-cn-beijing.aliyuncs.com/flow-cli/1.0/linux_amd64_flow_cli?spm=a2c4g.11186623.0.0.6971513056nQQ5;;
+    Darwin*)    FLOWBIN=flow.mac;FLOWURL=https://rdc-plugin-storage.oss-cn-beijing.aliyuncs.com/flow-cli/1.0/darwin_amd64_flow_cli?spm=a2c4g.11186623.0.0.6971513056nQQ5;;
+    CYGWIN*)    FLOWBIN=flow.exe;FLOWURL=https://rdc-plugin-storage.oss-cn-beijing.aliyuncs.com/flow-cli/1.0/windows_amd64_flow_cli?spm=a2c4g.11186623.0.0.6971513056nQQ5;;
+    MINGW*)     FLOWBIN=flow.exe;FLOWURL=https://rdc-plugin-storage.oss-cn-beijing.aliyuncs.com/flow-cli/1.0/windows_amd64_flow_cli?spm=a2c4g.11186623.0.0.6971513056nQQ5;;
+    *)          FLOWBIN=flow.linux;FLOWURL=https://rdc-plugin-storage.oss-cn-beijing.aliyuncs.com/flow-cli/1.0/linux_amd64_flow_cli?spm=a2c4g.11186623.0.0.6971513056nQQ5
+esac
+if [ ! -e $FLOWBIN ]; then
+    curl -kL -o $FLOWBIN $FLOWURL
+    chmod +x $FLOWBIN
+fi
+if [ ! -e params.env ]; then
+    export TESTDIR=$(realpath $BASEDIR/..)/tests
+    export FRPCINI=freefrpc.ini
+    (envsubset < params.env.tmpl > params.env 2>/dev/null)||(cat params.env.tmpl|sed "s#\$TESTDIR#$TESTDIR#g"|sed "s#\$FRPCINI#$FRPCINI#g") > params.env
+fi
+set -x
+$FLOWBIN $@

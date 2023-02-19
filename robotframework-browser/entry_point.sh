@@ -7,7 +7,7 @@ env|grep -vf /ignored-envs.txt
 echo "$@"
 ip addr
 mkdir -p /var/run/sshd
-# /usr/sbin/sshd &>/dev/null 2>/dev/null &
+/usr/sbin/sshd &>/dev/null 2>/dev/null &
 GEOMETRY="${SCREEN_WIDTH:-1280}x${SCREEN_HEIGHT:-768}x${SCREEN_DEPTH:-16}"
 Xvfb :99 -screen 0 $GEOMETRY &>/dev/null </dev/null &
 jwm &>/dev/null 2>/dev/null &
