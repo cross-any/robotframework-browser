@@ -62,7 +62,8 @@ elif [ "$1" = "robot" ]; then
   robot -d robot_logs "$@"
 elif [ "$1" = "npx" ]; then
   npm install
-  bash -c "$@"
+  shift
+  npx "$@"
 else
-  bash -c "$@"
+  "$@"
 fi
