@@ -4,7 +4,7 @@
     1. 使用飞流flow工具发布一个自定义步骤  
        1. 修改flow-tmpl/step.yaml之sign  
        2. ./flow login    
-       3. ./flow publish flow-tmpl      
+       3. ./flow publish      
     2. 新建流水线，添加新发布的步骤，添加报告上传
     3. 支持RobotFramework Browser、requests，支持测试录屏，支持实时vnc接入查看执行过程  
 ## 上传报告  
@@ -19,6 +19,11 @@ robot testfolder
 pabot testfolder
 ```
 testfolder 为测试文件的路径，参照tests目录。  
+
+## 效果图  
+![效果图](docs/result.png "效果图")
+## 配置图  
+![配置图](docs/setting.png "配置图")
 
 ## vnc实时查看执行过程  
 需要一个frp服务器，参照robotframework-browser/templates新建frp服务器和nginx  
