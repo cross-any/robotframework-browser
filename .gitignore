@@ -12,3 +12,5 @@ tests/xvfb.sh
 windli-test1/
 a/
 b/
+node_modules/
+playwright-report/

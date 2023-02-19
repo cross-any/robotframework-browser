@@ -24,6 +24,7 @@ cd $PROJECT_DIR
 # bash -c "$STEP_COMMAND"
 /root/entry_point.sh $TESTCOMMAND || echo [ERROR] 测试失败了
 
+if [ -e $OUTPUT_XML ]; then
 # # 上传报告
 # # walk through robot_logs to upload
 # output=`python3 /root/upload_report.py $OUTPUT_DIR`
@@ -40,3 +41,14 @@ STEP_ROBOT_FAILED=`echo $output | awk -F, '{print $2}'`
 STEP_ROBOT_PASSRATE=`echo $output | awk -F, '{print $3}'`
 
 redline Passed:成功:$STEP_ROBOT_PASS:Success Failed:失败:$STEP_ROBOT_FAILED:Error PassRate:成功率:$STEP_ROBOT_PASSRATE:Default Report:$STEP_REPORT_URL
+else
+    if [ -e $PROJECT_DIR/playwright-report/output.json ]; then
+        STEP_REPORT_URL=https://flow.aliyun.com/assets/$SYSTEM_REGION_ID/$PIPELINE_ID/$BUILD_NUMBER/playwright-report/index.html
+        printf "STEP_REPORT_URL: $STEP_REPORT_URL"
+        STEP_ROBOT_PASS=`jq '.suites[].specs[].tests[].results[].status | select(. == "passed")' $PROJECT_DIR/playwright-report/output.json|wc -l`
+        STEP_ROBOT_SKIPPED=`jq '.suites[].specs[].tests[].results[].status | select(. == "interruptted" or . == "skipped")' $PROJECT_DIR/playwright-report/output.json|wc -l`
+        STEP_ROBOT_FAILED=`jq '.suites[].specs[].tests[].results[].status | select(. == "failed")' $PROJECT_DIR/playwright-report/output.json|wc -l`
+        STEP_ROBOT_PASSRATE=$[STEP_ROBOT_PASS/(STEP_ROBOT_PASS+STEP_ROBOT_SKIPPED+STEP_ROBOT_FAILED)]
+        redline Passed:成功:$STEP_ROBOT_PASS:Success Failed:失败:$STEP_ROBOT_FAILED:Error Skipped:忽略:$STEP_ROBOT_SKIPED:Warning PassRate:成功率:$STEP_ROBOT_PASSRATE:Default Report:$STEP_REPORT_URL
+    fi
+fi

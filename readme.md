@@ -7,9 +7,10 @@
        3. ./flow publish      
     2. 新建流水线，添加新发布的步骤，添加报告上传
     3. 支持RobotFramework Browser、requests，支持测试录屏，支持实时vnc接入查看执行过程  
+    4. 支持nodejs playwright
 ## 上传报告  
-需要自己添加上传报告步骤，报告路径 robot_logs, 文件名 report.html  
-
+需要自己添加上传报告步骤，robotframework报告路径 robot_logs, 文件名 report.html  
+playwright报告路径playwright-report，文件名index.html  
 ## 测试命令  
 ```
 robot testfolder
@@ -18,7 +19,19 @@ robot testfolder
 ```
 pabot testfolder
 ```
-testfolder 为测试文件的路径，参照tests目录。  
+testfolder 为测试文件的路径，参照tests目录。 
+# 使用playwirght  
+```
+npx playwright test -x
+```
+使用playwirght时需要在playwright.config.js增加这个reporter配置：  
+```
+reporter: [
+    ['line'],
+    ['html', { open: 'never' }],
+    ['json', { outputFolder:'playwright-report',outputFile: 'output.json' }]
+  ]
+``` 
 
 ## 效果图  
 ![效果图](docs/result.png "效果图")

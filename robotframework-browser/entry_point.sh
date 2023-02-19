@@ -60,6 +60,9 @@ elif [ 0$PROCESSES -gt 1  -o "$1" = "pabotselenium" ]; then
 elif [ "$1" = "robot" ]; then
   shift
   robot -d robot_logs "$@"
+elif [ "$1" = "npx" ]; then
+  npm install
+  bash -c "$@"
 else
   bash -c "$@"
 fi
