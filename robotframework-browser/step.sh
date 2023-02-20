@@ -45,10 +45,16 @@ else
     if [ -e $PROJECT_DIR/playwright-report/output.json ]; then
         STEP_REPORT_URL=https://flow.aliyun.com/assets/$SYSTEM_REGION_ID/$PIPELINE_ID/$BUILD_NUMBER/playwright-report/index.html
         printf "STEP_REPORT_URL: $STEP_REPORT_URL"
-        STEP_ROBOT_PASS=`jq '.suites[].specs[].tests[].results[].status | select(. == "passed")' $PROJECT_DIR/playwright-report/output.json|wc -l`
-        STEP_ROBOT_SKIPPED=`jq '.suites[].specs[].tests[].results[].status | select(. == "interrupted" or . == "skipped")' $PROJECT_DIR/playwright-report/output.json|wc -l`
-        STEP_ROBOT_FAILED=`jq '.suites[].specs[].tests[].results[].status | select(. == "failed")' $PROJECT_DIR/playwright-report/output.json|wc -l`
-        STEP_ROBOT_PASSRATE=$[100*STEP_ROBOT_PASS/(STEP_ROBOT_PASS+STEP_ROBOT_SKIPPED+STEP_ROBOT_FAILED)]
-        redline Passed:成功:$STEP_ROBOT_PASS:Success Failed:失败:$STEP_ROBOT_FAILED:Error Skipped:忽略:$STEP_ROBOT_SKIPPED:Warning PassRate:成功率:$STEP_ROBOT_PASSRATE:Default Report:$STEP_REPORT_URL
+        STEP_ROBOT_PASS=`jq '.suites[].specs[].tests[].results | last .status | select(. == "passed")' $PROJECT_DIR/playwright-report/output.json|wc -l`
+        STEP_ROBOT_SKIPPED=`jq '.suites[].specs[].tests[].results | last .status | select(. == "interrupted" or . == "skipped")' $PROJECT_DIR/playwright-report/output.json|wc -l`
+        STEP_ROBOT_FAILED=`jq '.suites[].specs[].tests[].results | last .status | select(. == "failed" or . == "unexpected")' $PROJECT_DIR/playwright-report/output.json|wc -l`
+        STEP_ROBOT_FLAKY=`jq '.suites[].specs[].tests[].results | last .status | select(. == "flaky")' $PROJECT_DIR/playwright-report/output.json|wc -l`
+        STEP_ROBOT_PASSRATE=$[100*(STEP_ROBOT_PASS+STEP_ROBOT_FLAKY)/(STEP_ROBOT_PASS+STEP_ROBOT_FLAKY+STEP_ROBOT_SKIPPED+STEP_ROBOT_FAILED)]
+        STEP_ROBOT_WRANING=$[STEP_ROBOT_FLAKY+STEP_ROBOT_SKIPPED]
+        if [ "$STEP_ROBOT_WRANING" -eq 0 ]; then
+            redline Passed:成功:$STEP_ROBOT_PASS:Success Failed:失败:$STEP_ROBOT_FAILED:Error PassRate:成功率:$STEP_ROBOT_PASSRATE:Default Report:$STEP_REPORT_URL
+        else
+            redline Passed:成功:$STEP_ROBOT_PASS:Success Failed:失败:$STEP_ROBOT_FAILED:Error Skipped:忽略:$STEP_ROBOT_SKIPPED:Warning PassRate:成功率:$STEP_ROBOT_PASSRATE:Default Report:$STEP_REPORT_URL
+        fi
     fi
 fi
