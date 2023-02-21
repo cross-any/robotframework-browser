@@ -56,5 +56,8 @@ else
         else
             redline Passed:成功:$STEP_ROBOT_PASS:Success Failed:失败:$STEP_ROBOT_FAILED:Error Skipped:忽略:$STEP_ROBOT_SKIPPED:Warning PassRate:成功率:$STEP_ROBOT_PASSRATE:Default Report:$STEP_REPORT_URL
         fi
+        if [ -e $PROJECT_DIR/playwright-report/index.html -a -e $PROJECT_DIR/playwright-report/autotest.mp4 ]; then
+            sed -i 's/re(St,{className:"subnav-item",href:"#?",children:\["/re(St,{className:"subnav-item",href:"autotest.mp4",download:"autotest.mp4",children:\["录屏（请右键另存为.mp4文件）"\]}),re(St,{className:"subnav-item",href:"#?",children:\["/g' playwright-report/index.html
+        fi
     fi
 fi

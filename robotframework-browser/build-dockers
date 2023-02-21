@@ -1,21 +1,33 @@
 #!/bin/bash
 set -e
 pushd $(dirname $0)
-    docker build -t registry.cn-beijing.aliyuncs.com/windli/robotframework-browser:1.0 -f Dockerfile ..
+    pushd base
+        docker build -t registry.cn-beijing.aliyuncs.com/windli/robotframework-browser-base:1.0 -f Dockerfile .
+    popd
+    docker build -t registry.cn-beijing.aliyuncs.com/windli/robotframework-browser:1.0 -f Dockerfile .
     pushd chromium
-        docker build -t registry.cn-beijing.aliyuncs.com/windli/robotframework-browser-chromium:1.0 -f Dockerfile .
+        docker build -t registry.cn-beijing.aliyuncs.com/windli/robotframework-browser-chromium-base:1.0 -f Dockerfile.base .
+        docker build -t registry.cn-beijing.aliyuncs.com/windli/robotframework-browser-chromium:1.0 -f Dockerfile ..
     popd
     pushd all
-        docker build -t registry.cn-beijing.aliyuncs.com/windli/robotframework-browser-all:1.0 -f Dockerfile .
+        docker build -t registry.cn-beijing.aliyuncs.com/windli/robotframework-browser-all-base:1.0 -f Dockerfile.base .
+        docker build -t registry.cn-beijing.aliyuncs.com/windli/robotframework-browser-all:1.0 -f Dockerfile ..
     popd
 
     pushd firefox
-        docker build -t registry.cn-beijing.aliyuncs.com/windli/robotframework-browser-firefox:1.0 -f Dockerfile .
+        docker build -t registry.cn-beijing.aliyuncs.com/windli/robotframework-browser-firefox-base:1.0 -f Dockerfile.base .
+        docker build -t registry.cn-beijing.aliyuncs.com/windli/robotframework-browser-firefox:1.0 -f Dockerfile ..
     popd
     pushd webkit
-        docker build -t registry.cn-beijing.aliyuncs.com/windli/robotframework-browser-webkit:1.0 -f Dockerfile .
+        docker build -t registry.cn-beijing.aliyuncs.com/windli/robotframework-browser-webkit-base:1.0 -f Dockerfile.base .
+        docker build -t registry.cn-beijing.aliyuncs.com/windli/robotframework-browser-webkit:1.0 -f Dockerfile ..
     popd
+    docker push registry.cn-beijing.aliyuncs.com/windli/robotframework-browser-base:1.0
     docker push registry.cn-beijing.aliyuncs.com/windli/robotframework-browser:1.0
+    docker push registry.cn-beijing.aliyuncs.com/windli/robotframework-browser-chromium-base:1.0
+    docker push registry.cn-beijing.aliyuncs.com/windli/robotframework-browser-firefox-base:1.0
+    docker push registry.cn-beijing.aliyuncs.com/windli/robotframework-browser-webkit-base:1.0
+    docker push registry.cn-beijing.aliyuncs.com/windli/robotframework-browser-all-base:1.0
     docker push registry.cn-beijing.aliyuncs.com/windli/robotframework-browser-chromium:1.0
     docker push registry.cn-beijing.aliyuncs.com/windli/robotframework-browser-firefox:1.0
     docker push registry.cn-beijing.aliyuncs.com/windli/robotframework-browser-webkit:1.0

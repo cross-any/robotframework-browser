@@ -1,8 +1,15 @@
 #!/bin/bash
 set -e
 pushd $(dirname $0)
-    docker build -t registry.cn-beijing.aliyuncs.com/windli/robotframework-browser:1.0 -f Dockerfile ..
+    pushd base
+        docker build -t registry.cn-beijing.aliyuncs.com/windli/robotframework-browser-base:1.0 -f Dockerfile .
+    popd
+    docker build -t registry.cn-beijing.aliyuncs.com/windli/robotframework-browser:1.0 -f Dockerfile .
     pushd chromium
+        docker build -t registry.cn-beijing.aliyuncs.com/windli/robotframework-browser-chromium-base:1.0 -f Dockerfile.base .
         docker build -t registry.cn-beijing.aliyuncs.com/windli/robotframework-browser-chromium:1.0 -f Dockerfile ..
+    popd
+    pushd ../robotframework-browser-flow-chromium
+        docker build -t registry.cn-beijing.aliyuncs.com/windli/robotframework-browser-flow-chromium:1.0 -f Dockerfile ..
     popd
 popd

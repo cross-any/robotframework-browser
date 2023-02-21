@@ -1,16 +1,33 @@
 #!/bin/bash
 set -e
-trap "pkill ffmpeg" INT TERM EXIT
+# trap "pkill ffmpeg" INT TERM EXIT
 # set -x
 mkdir -p robot_logs
-env|grep -vf /ignored-envs.txt
-echo "$@"
+env|grep -vf /root/ignored-envs.txt
 ip addr
+id
+echo "$@"
 mkdir -p /var/run/sshd
 /usr/sbin/sshd &>/dev/null 2>/dev/null &
 GEOMETRY="${SCREEN_WIDTH:-1280}x${SCREEN_HEIGHT:-768}x${SCREEN_DEPTH:-16}"
 Xvfb :99 -screen 0 $GEOMETRY &>/dev/null </dev/null &
-jwm &>/dev/null 2>/dev/null &
+jwmrc=/etc/system.jwmrc
+if [ -e /etc/jwm/system.jwmrc ]; then
+  jwmrc=/etc/jwm/system.jwmrc
+fi
+sed 's/format="%H:%M"/format="%H:%M:%S"/g' -i $jwmrc
+sed 's/<Tray x/<Tray valign="top" x/g' -i $jwmrc
+jwm >/dev/null 2>/dev/null &
+watchdog() {
+  while true; do
+    sleep 2
+    if ! (ps -ef|grep jwm|grep -v grep > /dev/null); then
+      echo restart jwm
+      jwm &>/dev/null 2>/dev/null &
+    fi
+  done
+}
+watchdog &>/dev/null 2>/dev/null &
 x11vnc -ncache 10 -listen 0.0.0.0 -rfbport 5900 -noipv6 -display $DISPLAY -forever &>/dev/null  </dev/null &
 /opt/bin/noVNC/utils/novnc_proxy --listen 7900 --vnc localhost:5900 &>/dev/null  </dev/null &
 if [ -n "$FRPC" -a -e "$FRPC" ]; then
@@ -19,13 +36,25 @@ else
   echo frpc配置文件${FRPC}不存在,不映射端口
 fi
 if [ -n "$RECORD" ]; then
-  ffmpeg -f x11grab -i :99 -y -pix_fmt yuv420p "$RECORD" &>robot_logs/record.log  </dev/null &
+  RECORD_DIR=$(dirname $RECORD)
+  mkdir -p $RECORD_DIR
+  #create a session
+  screen -d -m -S ffmpegsession
+  #send the command to the session
+  screen -S ffmpegsession -p 0 -X stuff "ffmpeg -f x11grab -i :99 -y -pix_fmt yuv420p /root/autotest.mp4 >/root/ffmpeg-record.log^M"
+  RECORD_PATH=$(realpath $RECORD)
+  RECORD_LOG_PATH=$(realpath $(dirname $RECORD)/record.log)
+  #send the q string to stop ffmpeg
+  trap "screen -S ffmpegsession -p 0 -X stuff \"q\";screen -S ffmpegsession -p 0 -X stuff \"exit^M\";sleep 1;/bin/mv /root/autotest.mp4 $RECORD_PATH; /bin/mv /root/ffmpeg-record.log $RECORD_LOG_PATH" INT TERM EXIT
+  # ffmpeg -f x11grab -i :99 -y -pix_fmt yuv420p /root/autotest.mp4 &>/root/ffmpeg-record.log  </dev/null &
+  # FFMPEGID=$(echo $!)
+  # trap "/root/recover.sh $FFMPEGID $RECORD_PATH $RECORD_LOG_PATH;pkill ffmpeg" INT TERM EXIT
 fi
-if [ -e /tests/requirements-$BASE_LIBRARY.txt ]; then
-    pip install -r /tests/requirements-$BASE_LIBRARY.txt
+if [ -e requirements-$BASE_LIBRARY.txt ]; then
+    pip install -r requirements-$BASE_LIBRARY.txt
 fi
-if [ -e /tests/requirements.txt ]; then
-    pip install -r /tests/requirements.txt
+if [ -e requirements.txt ]; then
+    pip install -r requirements.txt
 fi
 if [ "$1" = "node" -a ! -z $GRUD_REGISTER_URL ]; then
   shift

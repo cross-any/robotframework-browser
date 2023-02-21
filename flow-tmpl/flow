@@ -20,5 +20,6 @@ if [ ! -e params.env ]; then
     export FRPCINI=freefrpc.ini
     (envsubset < params.env.tmpl > params.env 2>/dev/null)||(cat params.env.tmpl|sed "s#\$TESTDIR#$TESTDIR#g"|sed "s#\$FRPCINI#$FRPCINI#g") > params.env
 fi
+popd
 set -x
 $FLOWBIN $@

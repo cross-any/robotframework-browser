@@ -2,7 +2,7 @@
 name: 自动化测试
 sign: robotframework-browser-flow-windli
 description: 用于RobotFramework的测试步骤(Chroumium浏览器)
-image: registry.cn-beijing.aliyuncs.com/windli/robotframework-browser-flow-all:1.1
+image: registry.cn-beijing.aliyuncs.com/windli/robotframework-browser-flow-all:1.0
 items:
   - label: 自动测试命令(robot/pabot)
     name: TESTCOMMAND
