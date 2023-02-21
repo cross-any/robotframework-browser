@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-set -x
+# set -x
 
 # 系统提供参数，从流水线上下文获取
 echo [INFO] PIPELINE_ID=$PIPELINE_ID       # 流水线ID
@@ -22,8 +22,13 @@ cd $PROJECT_DIR
 
 # sh -ex $WORK_SPACE/user_command.sh
 # bash -c "$STEP_COMMAND"
-/root/entry_point.sh $TESTCOMMAND || echo [ERROR] 测试失败了
-
+if [ $(echo "$TESTCOMMAND"|wc -l) -gt 1 ]; then
+  echo "$TESTCOMMAND" > $WORK_SPACE/test_command.sh
+  cat $WORK_SPACE/test_command.sh
+  /root/entry_point.sh bash -ex $WORK_SPACE/test_command.sh || echo [ERROR] 测试失败了
+else
+  /root/entry_point.sh $TESTCOMMAND || echo [ERROR] 测试失败了
+fi
 if [ -e $OUTPUT_XML ]; then
 # # 上传报告
 # # walk through robot_logs to upload
