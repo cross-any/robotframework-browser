@@ -38,10 +38,21 @@ fi
 if [ -n "$RECORD" ]; then
   RECORD_DIR=$(dirname $RECORD)
   mkdir -p $RECORD_DIR
+
+  if [ "$RECORD_AUDIO" = "true" ]; then
+    # Start the pulseaudio server
+    pulseaudio -D --exit-idle-time=-1
+    # Load the virtual sink and set it as default
+    pacmd load-module module-virtual-sink sink_name=v1
+    pacmd set-default-sink v1
+    # set the monitor of v1 sink to be the default source
+    pacmd set-default-source v1.monitor
+    FFMPEG_EXT="$FFMPEG_EXT -f pulse -i default"
+  fi
   #create a session
   screen -d -m -S ffmpegsession
   #send the command to the session
-  screen -S ffmpegsession -p 0 -X stuff "ffmpeg -f x11grab -i :99 -y -pix_fmt yuv420p /root/autotest.mp4 >/root/ffmpeg-record.log^M"
+  screen -S ffmpegsession -p 0 -X stuff "ffmpeg -f x11grab -i :99 -y -pix_fmt yuv420p $FFMPEG_EXT /root/autotest.mp4 >/root/ffmpeg-record.log^M"
   RECORD_PATH=$(realpath $RECORD)
   RECORD_LOG_PATH=$(realpath $(dirname $RECORD)/record.log)
   #send the q string to stop ffmpeg

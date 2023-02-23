@@ -12,8 +12,8 @@ ENV SCREEN_WIDTH=1280 \
     FIREFOX_DEPS="libgtk-3-0 libcairo-gobject2 libdbus-glib-1-2 libatomic1 libxslt1.1" \
     CHROMIUM_DEPS="libsoup2.4-1 libvpx7 libevent-2.1-7 libwoff1 libharfbuzz-icu0 libgstreamer-plugins-base1.0-0 libgstreamer1.0-0 libgstreamer-gl1.0-0 libopenjp2-7 libwebpdemux2 libenchant-2-2 libsecret-1-0 libhyphen0 libmanette-0.2-0 libgles2 gstreamer1.0-libav libnss3 libnspr4" \
     TEST_DEPS="python3 python3-pip" \
-    FLOW_DEPS="jq curl unzip jwm tzdata xvfb fonts-noto-cjk x11vnc xz-utils openssh-server xterm iproute2" \
-    REC_DEPS="ffmpeg iputils-ping screen"
+    FLOW_DEPS="jq curl unzip jwm tzdata xvfb fonts-noto-cjk x11vnc xz-utils openssh-server xterm iproute2 git" \
+    REC_DEPS="ffmpeg iputils-ping screen pulseaudio"
 #   SERVER_DEPS="openjdk-8-jdk redis-server mysql-server nginx maven"
 # RUN sed -i -E 's/archive.ubuntu.com/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list && sed -i -E 's/security.ubuntu.com/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list
 EXPOSE 5900 7900
