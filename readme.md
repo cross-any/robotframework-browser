@@ -3,8 +3,10 @@
     需要：  
     1. 使用飞流flow工具发布一个自定义步骤  
        1. 修改flow-tmpl/step.yaml之sign  
-       2. ./flow login    
-       3. ./flow publish      
+       2. cd flow-tmpl
+       3. ./flow login    
+       4. ./flow step publish      
+       5. ./flow step run  #运行测试
     2. 新建流水线，添加新发布的步骤，添加报告上传
     3. 支持RobotFramework Browser、requests，支持测试录屏，支持实时vnc接入查看执行过程  
     4. 支持nodejs playwright
@@ -51,3 +53,15 @@ https://help.aliyun.com/document_detail/153811.html?spm=a2cl9.flow_devops2020_go
 https://cr.console.aliyun.com/cn-beijing/instances  
 ## 内网穿透frp  
 https://github.com/fatedier/frp  
+
+# python chromedriver  
+直接使用python + chromedriver + selenium执行网页脚本。   
+    需要：  
+    1. 使用飞流flow工具发布一个自定义步骤  
+       1. 修改chromedriver-tmpl/step.yaml之sign  
+       2. cd chromedriver-tmpl
+       3. ./flow login    
+       4. ./flow step publish      
+       5. ./flow step run  #运行测试
+    2. 新建流水线，添加新发布的步骤，添加报告上传
+    3. 支持python + chromedriver + selenium，支持测试录屏(需要关掉headless)，支持实时vnc接入查看执行过程  

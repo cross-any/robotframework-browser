@@ -30,9 +30,6 @@ if [ $(echo "$TESTCOMMAND" | wc -l) -gt 1 ]; then
 else
     /root/entry_point.sh $TESTCOMMAND || FAILED=1
 fi
-if [ $FAILED -gt 0 ]; then
-    echo [ERROR] 执行失败了
-fi
 if [ -e $OUTPUT_XML ]; then
     # # 上传报告
     # # walk through robot_logs to upload

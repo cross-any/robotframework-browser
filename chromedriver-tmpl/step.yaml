@@ -1,0 +1,43 @@
+---
+name: python+chromium+selenium
+sign: python-chromedriver-flow-dl
+description: 用于RobotFramework的测试步骤(Chromium浏览器)
+image: registry.cn-beijing.aliyuncs.com/windli/python-chromedriver-flow:1.0
+items:
+  - label: python+chromium+selenium网站抓取
+    name: TESTCOMMAND
+    type: shell
+    value: |
+      python test.py
+  - label: 红线信息
+    name: CHECK_REDLINES
+    type: addable_group
+    rules:
+      - require: false
+    add_button:
+      type: icon
+      icon: plus
+      text: 增加红线
+      tip:
+        icon: question-circle
+        description: 红线校验失败步骤标记为失败
+    template:
+      items:
+        - name: redline
+          label: 红线
+          position: flat
+          type: custom_redline_dropdown
+          datamap: '[{"key": "PassRate", "type":"GE"}]'
+          rules:
+            -requires: false
+  - label: frp端口映射配置文件（为空则不映射）
+    name: FRPC
+    type: input
+    value: |
+      frpc.ini
+  - label: 录屏存放位置（为空则不录屏）
+    name: RECORD
+    type: input
+    value: |
+      logs/autorun.mp4
+  
